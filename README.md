@@ -41,9 +41,12 @@ Or use the Jupyter notebook: `notebooks/01_full_pipeline.ipynb`
 
 | Metric | Value |
 |--------|-------|
-| AUC | See results/metrics/evaluation_report.json |
-| EER | See results/metrics/evaluation_report.json |
-| F1 | See results/metrics/evaluation_report.json |
+| AUC | 1.0000 |                                                                                                                                        
+| EER | 0.0005 |                                                                                                                                        
+| F1 | 0.9996 |                                                                                                                                         
+| Precision | 0.9996 |                                                                                                                                  
+| Recall | 0.9995 |                                                                                                                                     
+| Accuracy | 0.9996 |  
 
 *Update this table after training with your actual results.*
 

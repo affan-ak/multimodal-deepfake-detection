@@ -35,11 +35,12 @@
 
 | Metric | Value |
 |--------|-------|
-| AUC | See evaluation_report.json |
-| EER | See evaluation_report.json |
-| F1 Score | See evaluation_report.json |
-| Precision | See evaluation_report.json |
-| Recall | See evaluation_report.json |
+| AUC | 1.0000 |                                                                                                                                        
+| EER | 0.0005 |                                                                                                                                        
+| F1 | 0.9996 |                                                                                                                                         
+| Precision | 0.9996 |                                                                                                                                  
+| Recall | 0.9995 |                                                                                                                                     
+| Accuracy | 0.9996 |  
 
 ## Limitations and Bias
 
@@ -85,20 +86,20 @@ GradCAM heatmaps are generated for all test predictions, showing which facial re
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 0.1.0 | 2025-07 | Initial release: XceptionNet on 140K Real and Fake Faces |
+| 0.1.0 | 2026-07 | Initial release: XceptionNet on 140K Real and Fake Faces |
 
 ## Citation
 
 If you use this work, please cite:
 ```
-@software{kazim2025deepfake,
+@software{kazim2026deepfake,
   author = {Kazim, Affan Ahmed},
   title = {Multimodal Deepfake Detection Framework},
-  year = {2025},
-  url = {https://github.com/YOUR_USERNAME/multimodal-deepfake-detection}
+  year = {2026},
+  url = {https://github.com/affan-ak/multimodal-deepfake-detection}
 }
 ```
 
 ## Contact
 
-Affan Ahmed Kazim — [GitHub](https://github.com/YOUR_USERNAME)
+Affan Ahmed Kazim — [GitHub](https://github.com/affan-ak)

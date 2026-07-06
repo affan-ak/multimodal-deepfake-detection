@@ -1,0 +1,41 @@
+{
+  "test_auc": 0.9999994467647072,
+  "test_eer": 0.0005237823155164575,
+  "eer_threshold": 0.4474543333053589,
+  "test_f1": 0.9995714081622934,
+  "test_precision": 0.9996190113344128,
+  "test_recall": 0.9995238095238095,
+  "test_accuracy": 0.99957144897862,
+  "num_test_samples": 21001,
+  "num_real": 10501,
+  "num_fake": 10500,
+  "classification_report": {
+    "Real": {
+      "precision": 0.9995239002094839,
+      "recall": 0.9996190838967718,
+      "f1-score": 0.9995714897871733,
+      "support": 10501.0
+    },
+    "Fake": {
+      "precision": 0.9996190113344128,
+      "recall": 0.9995238095238095,
+      "f1-score": 0.9995714081622934,
+      "support": 10500.0
+    },
+    "accuracy": 0.99957144897862,
+    "macro avg": {
+      "precision": 0.9995714557719484,
+      "recall": 0.9995714467102906,
+      "f1-score": 0.9995714489747334,
+      "support": 21001.0
+    },
+    "weighted avg": {
+      "precision": 0.9995714535075056,
+      "recall": 0.99957144897862,
+      "f1-score": 0.9995714489766766,
+      "support": 21001.0
+    }
+  },
+  "model_checkpoint_epoch": 9,
+  "model_name": "xceptionnet"
+}
