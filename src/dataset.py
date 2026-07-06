@@ -62,13 +62,15 @@ def collect_samples(faces_dir=None):
     paths = []
     labels = []
 
+    extensions = ("*.jpg", "*.jpeg", "*.png")
     for label_name, label_idx in [("real", 0), ("fake", 1)]:
         label_dir = faces_dir / label_name
         if not label_dir.exists():
             continue
-        for img_path in label_dir.rglob("*.jpg"):
-            paths.append(str(img_path))
-            labels.append(label_idx)
+        for ext in extensions:
+            for img_path in label_dir.rglob(ext):
+                paths.append(str(img_path))
+                labels.append(label_idx)
 
     return paths, labels
 

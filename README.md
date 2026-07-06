@@ -6,7 +6,7 @@ A reproducible deepfake detection system with standardized evaluation and explai
 
 This framework implements Phase I of a multimodal fraud detection system: single-modality video deepfake detection with:
 
-- **XceptionNet-based detector** fine-tuned on the Deepfake Detection Challenge (DFDC) dataset
+- **XceptionNet-based detector** fine-tuned on the 140K Real and Fake Faces dataset
 - **Reproducible evaluation harness** with fixed splits, seeds, and versioned metrics (AUC, EER, F1)
 - **GradCAM explainability** showing which facial regions trigger detection
 - **Model card** documenting performance, limitations, and demographic considerations
@@ -92,7 +92,7 @@ This repository is Phase I of a larger multimodal fraud detection system:
 
 ## Dataset
 
-Training uses the [Deepfake Detection Challenge (DFDC)](https://www.kaggle.com/competitions/deepfake-detection-challenge) dataset. Due to size and licensing, raw data is not included in this repository.
+Training uses the [140K Real and Fake Faces](https://www.kaggle.com/datasets/xhlulu/140k-real-and-fake-faces) dataset (~70K real faces from Flickr/CelebA, ~70K StyleGAN-generated fake faces). Due to size and licensing, raw data is not included in this repository.
 
 ## License
 

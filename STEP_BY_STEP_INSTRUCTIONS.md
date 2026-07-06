@@ -72,20 +72,14 @@ cp -r "/Users/affankaz/NIW Claude/deepfake-detection-project/"* ~/Desktop/multim
 
 ---
 
-## PART 2: Get the DFDC Dataset from Kaggle
+## PART 2: Get the Dataset from Kaggle
 
 ### Step 2.1: Create a Kaggle Account
 
 1. Go to https://www.kaggle.com
 2. Sign up with your Google account or email
 
-### Step 2.2: Accept the DFDC Competition Rules
-
-1. Go to https://www.kaggle.com/competitions/deepfake-detection-challenge
-2. Click "Late Submission" or "Join Competition"
-3. Accept the rules (required to download the data)
-
-### Step 2.3: Get Your Kaggle API Key
+### Step 2.2: Get Your Kaggle API Key
 
 1. Go to https://www.kaggle.com/settings
 2. Scroll to "API" section
@@ -158,7 +152,7 @@ In the JupyterLab terminal:
 mkdir -p ~/.kaggle
 ```
 
-Now upload your `kaggle.json` file (from Part 2, Step 2.3):
+Now upload your `kaggle.json` file (from Part 2, Step 2.2):
 1. In JupyterLab file browser, navigate to the terminal's home
 2. Upload `kaggle.json` to the notebook instance
 3. Then in terminal:
@@ -168,32 +162,40 @@ mv /home/ec2-user/SageMaker/kaggle.json ~/.kaggle/kaggle.json
 chmod 600 ~/.kaggle/kaggle.json
 ```
 
-### Step 4.4: Download the DFDC Dataset
+### Step 4.4: Download the 140K Real and Fake Faces Dataset
 
 In the terminal:
 
 ```bash
 cd /home/ec2-user/SageMaker/multimodal-deepfake-detection
 
-# Download DFDC sample data (approximately 10GB compressed)
-# This downloads 4 parts - we only need parts 0-3 for a strong prototype
-kaggle competitions download -c deepfake-detection-challenge -f dfdc_train_part_00.zip
-kaggle competitions download -c deepfake-detection-challenge -f dfdc_train_part_01.zip
-kaggle competitions download -c deepfake-detection-challenge -f dfdc_train_part_02.zip
-kaggle competitions download -c deepfake-detection-challenge -f dfdc_train_part_03.zip
+# Download the 140K Real and Fake Faces dataset (~2.5 GB)
+kaggle datasets download -d xhlulu/140k-real-and-fake-faces
 
-# Create data directory and unzip
-mkdir -p data/raw
-unzip dfdc_train_part_00.zip -d data/raw/part_00
-unzip dfdc_train_part_01.zip -d data/raw/part_01
-unzip dfdc_train_part_02.zip -d data/raw/part_02
-unzip dfdc_train_part_03.zip -d data/raw/part_03
+# Unzip
+unzip 140k-real-and-fake-faces.zip -d data/raw_download
 
-# Clean up zip files to save space
-rm -f dfdc_train_part_*.zip
+# Organize into the structure the code expects
+mkdir -p data/processed/faces
+cp -r data/raw_download/real_vs_fake/real-vs-fake/train/real data/processed/faces/real
+cp -r data/raw_download/real_vs_fake/real-vs-fake/train/fake data/processed/faces/fake
+
+# Also grab validation and test sets and merge them in (more data = better model)
+cp data/raw_download/real_vs_fake/real-vs-fake/valid/real/* data/processed/faces/real/
+cp data/raw_download/real_vs_fake/real-vs-fake/valid/fake/* data/processed/faces/fake/
+cp data/raw_download/real_vs_fake/real-vs-fake/test/real/* data/processed/faces/real/
+cp data/raw_download/real_vs_fake/real-vs-fake/test/fake/* data/processed/faces/fake/
+
+# Clean up to save space
+rm -f 140k-real-and-fake-faces.zip
+rm -rf data/raw_download
+
+# Verify
+echo "Real faces:" && ls data/processed/faces/real | wc -l
+echo "Fake faces:" && ls data/processed/faces/fake | wc -l
 ```
 
-**Note**: Each part is ~10GB. If disk space is a concern, start with just parts 00 and 01.
+You should see approximately 70,000 real and 70,000 fake face images.
 
 ---
 
@@ -210,11 +212,11 @@ rm -f dfdc_train_part_*.zip
 The notebook is organized into sections. Run cells one at a time (Shift+Enter):
 
 1. **Setup & Imports** — verifies GPU is available
-2. **Face Extraction** — extracts faces from videos (takes 2-4 hours for 4 parts)
+2. **Verify Dataset** — confirms face images are in place
 3. **Train XceptionNet** — trains the deepfake detector (~2-3 hours)
 4. **Evaluate** — generates metrics (AUC, F1, EER, confusion matrix)
 5. **GradCAM Heatmaps** — generates explainability visualizations
-6. **Generate Reports** — produces the evaluation report and model card
+6. **Review Results** — displays plots and final metrics
 
 Each section has explanatory text and progress indicators.
 
@@ -345,13 +347,12 @@ When you're completely done with the project:
 |------|------|
 | GitHub + Kaggle setup (Parts 1-2) | 30 minutes |
 | SageMaker instance creation (Part 3) | 10 minutes |
-| Environment setup + dataset download (Part 4) | 30-60 minutes |
-| Face extraction | 2-4 hours (can leave running) |
+| Environment setup + dataset download (Part 4) | 20-30 minutes |
 | Model training | 2-3 hours (can leave running) |
 | Evaluation + heatmaps | 30-60 minutes |
 | Push to GitHub (Part 6) | 15 minutes |
-| **Total active time (you at keyboard)** | **~2 hours** |
-| **Total wall-clock time** | **~8-12 hours** |
+| **Total active time (you at keyboard)** | **~1.5 hours** |
+| **Total wall-clock time** | **~4-5 hours** |
 
 ---
 
@@ -359,12 +360,12 @@ When you're completely done with the project:
 
 | Item | Cost |
 |------|------|
-| SageMaker ml.g5.xlarge (~10 hours) | ~$14 |
+| SageMaker ml.g5.xlarge (~5 hours) | ~$7 |
 | SageMaker storage (200GB) | ~$0.70/day while stopped |
 | GitHub | Free |
 | Kaggle | Free |
 | HuggingFace | Free |
-| **Total** | **~$15-20** |
+| **Total** | **~$8-12** |
 
 ---
 
@@ -376,6 +377,8 @@ When you're completely done with the project:
 
 **Git push rejected**: Make sure you're using the Personal Access Token as password, not your GitHub password.
 
-**Notebook kernel dies**: The instance may be running out of RAM during face extraction. Process fewer videos at a time (edit `config.py` to reduce `MAX_VIDEOS_PER_PART`).
+**Notebook kernel dies**: The instance may be running out of RAM. Reduce `BATCH_SIZE` in `src/config.py` from 32 to 16.
 
 **Instance stuck on "Pending"**: Your AWS account may not have quota for g5 instances. Try `ml.g4dn.xlarge` instead (slightly slower but usually available).
+
+**Dataset folder structure wrong**: After unzipping, verify `data/processed/faces/real/` and `data/processed/faces/fake/` contain `.jpg` files directly (not nested subfolders). Run `ls data/processed/faces/real | head` to check.
